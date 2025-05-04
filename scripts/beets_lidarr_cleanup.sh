@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
 # CONFIGURATION
-API_KEY="fcb87aa43a5349a8a234bd90c8ad1dba"
-LIDARR_HOST="http://192.168.1.94:6061"
-ROOT_DIR="/music"
+API_KEY="YOURAPIKEYFROM LIDARR"
+LIDARR_HOST="http://LIDARIP:6061"
+ROOT_DIR="/music" #change this to match your root dir
 BEETS_CONFIG="/scripts/beets-config.yaml"
 LOGFILE="/scripts/beets_lidarr_cleanup.log"
 MATCHED_LOG="/scripts/beets_matched.log"
