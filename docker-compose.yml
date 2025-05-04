@@ -1,0 +1,20 @@
+services:
+  beets-cleaner:
+    build:
+      context: .
+    container_name: beets-cleaner
+    environment:
+      - PUID=1000
+      - PGID=1000
+    networks:
+      - casalan
+    volumes:
+      - /music:/music
+      - ./scripts:/scripts
+    working_dir: /scripts
+    entrypoint: ["bash", "/scripts/beets_lidarr_cleanup.sh"]
+    restart: "no"
+
+networks:
+  casalan:
+    external: true
