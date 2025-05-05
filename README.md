@@ -6,6 +6,26 @@ This utility scans your Lidarr-managed music library for folders that contain mu
 
 ---
 
+## ⚡ Quickstart
+
+```bash
+# Clone the repo
+cd beets-lidarr-mapper
+
+# Copy the example environment file and customize it
+cp .env.example config.env
+
+# Run the container with full processing
+docker compose up --build
+
+# Or test first with dry-run and resume support
+docker compose run beets-cleaner --dry-run --resume-only
+```
+
+---
+
+---
+
 ## 🔧 Features
 - Detects music folders not associated with albums in Lidarr
 - Runs Beets to automatically tag music metadata
@@ -17,32 +37,57 @@ This utility scans your Lidarr-managed music library for folders that contain mu
 
 ---
 
-## 📦 Usage
+## 🚀 **Usage**
 
-### Docker Compose
+This tool runs a containerized `beets` instance to process and clean up unmapped music files, helping Lidarr correctly identify and tag your library.
 
-Place the following files in the same directory:
-- `docker-compose.yml`
-- `Dockerfile`
-- `scripts/`
-  - `beets_lidarr_cleanup.sh`
-  - `beets-config.yaml`
+---
 
-Then build and run:
+## 🔧 **Setup**
+
+1. Copy the provided `.env.example` file and fill in your Lidarr API key and path details:
+
+```bash
+cp .env.example config.env
+```
+
+2. Run the container:
 
 ```bash
 docker compose up --build
 ```
 
-### Optional Flags
+---
+
+## 🏁 **Runtime Flags**
+
+The script supports the following runtime flags:
+
+| Flag             | Description                                                                 |
+|------------------|-----------------------------------------------------------------------------|
+| `--dry-run`      | Runs without making changes (no tagging, no Lidarr rescan)                  |
+| `--refresh-cache`| Forces a fresh Lidarr album path list (ignores cached results)              |
+| `--resume-only`  | Skips folder scanning and only resumes from previously generated todo list  |
+
+You can combine flags like so:
 
 ```bash
-docker compose run beets-cleaner --refresh-cache
+docker compose run beets-cleaner --dry-run --resume-only
 ```
-- `--refresh-cache`: Forces reloading Lidarr album paths via API instead of using the cached list.
 
-To enable dry run mode:
-- Edit `beets_lidarr_cleanup.sh` and set `DRY_RUN=true`
+---
+
+## 📂  **Folder Tracking**
+
+To ensure resumability, the script tracks folder state:
+
+- `beets_todo.log` — All discovered unmapped folders
+- `beets_done.log` — Successfully processed folders
+- `beets_failed.log` — Folders Beets could not tag
+- `beets_remaining.log` — What’s left to process
+
+You can safely stop and restart the container, and it will continue where it left off.
+
 
 ---
 
@@ -54,7 +99,8 @@ To enable dry run mode:
 ├── Dockerfile
 └── scripts
     ├── beets-config.yaml
-    └── beets_lidarr_cleanup.sh
+    ├── beets_lidarr_cleanup.sh
+    └── config.env
 ```
 
 ---
@@ -68,7 +114,9 @@ To enable dry run mode:
 ---
 
 ## 🛡 Permissions
-Ensure your container user has read access to your music directory. On Unraid:
+Ensure your container user has read access to your music directory. 
+
+On Unraid:
 
 ```bash
 chown -R nobody:users /mnt/user/YOUR_MUSIC_PATH
