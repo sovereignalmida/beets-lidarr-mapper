@@ -6,6 +6,26 @@ This utility scans your Lidarr-managed music library for folders that contain mu
 
 ---
 
+## ⚡ Quickstart
+
+```bash
+# Clone the repo
+cd beets-lidarr-mapper
+
+# Copy the example environment file and customize it
+cp .env.example config.env
+
+# Run the container with full processing
+docker compose up --build
+
+# Or test first with dry-run and resume support
+docker compose run beets-cleaner --dry-run --resume-only
+```
+
+---
+
+---
+
 ## 🔧 Features
 - Detects music folders not associated with albums in Lidarr
 - Runs Beets to automatically tag music metadata
